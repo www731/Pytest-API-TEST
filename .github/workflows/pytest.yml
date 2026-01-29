@@ -26,11 +26,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest-html==4.2.1
 
       - name: Run pytest
         run: |
           mkdir -p report
-          pytest tests/ --html=report/report.html
+           pytest tests/ --html=report/report.html --self-contained-html
 
       - name: Upload pytest html report
         uses: actions/upload-artifact@v4
