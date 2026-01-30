@@ -13,6 +13,11 @@ jobs:
   pytest-api-test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        env: [ dev, prod ]
+
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,7 +33,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest-html
 
-      - name: Run pytest
+      - name: Run pytest (${{ matrix.env }})
+        env:
+          ENV: ${{ matrix.env }}
         run: |
           mkdir -p report
            pytest tests/ --html=report/report.html --self-contained-html
