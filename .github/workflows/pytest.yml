@@ -13,13 +13,8 @@ jobs:
   pytest-api-test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        env: [ dev, prod ]
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v3
@@ -32,18 +27,14 @@ jobs:
           pip install -r requirements.txt
           pip install allure-pytest
 
-      - name: Test with pytest
+      - name: Run pytest (dev)
+        env:
+          ENV: dev
         run: |
-          ENV=dev pytest
+          pytest tests/ --alluredir=allure-results
 
-      - name: Archive Pytest allure test report
+      - name: Upload Allure results
         uses: actions/upload-artifact@v4
         with:
-            name: Pytest-allure-report
-            path: allure-results
-
-      - name: Upload Pytest allure report to GitHub
-        uses: actions/upload-artifact@v4
-        with:
-          name: Pytest-allure-report
+          name: Pytest-allure-results-dev
           path: allure-results
